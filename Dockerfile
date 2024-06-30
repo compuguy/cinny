@@ -1,5 +1,5 @@
 ## Builder
-FROM node:20.12.2-alpine3.18 as builder
+FROM node:20.12.2-alpine3.18 AS builder
 
 WORKDIR /src
 
@@ -12,6 +12,8 @@ COPY /contrib/nginx/cinny-docker.conf /src/
 
 ## App
 FROM nginx:1.27.0-alpine
+
+RUN apk --no-cache -U upgrade
 
 COPY --from=builder /src/dist /app
 COPY --from=builder /src/cinny-docker.conf /etc/nginx/conf.d/default.conf
