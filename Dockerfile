@@ -13,7 +13,11 @@ COPY /contrib/nginx/cinny-docker.conf /src/
 ## App
 FROM nginx:1.27.0-alpine
 
-RUN apk --no-cache -U upgrade
+RUN echo https://mirror.leaseweb.com/alpine/v3.19/main/ > /etc/apk/repositories; \
+    echo https://mirror.leaseweb.com/alpine/v3.19/community/ >> /etc/apk/repositories
+
+RUN apk update \
+ && apk --no-cache -U upgrade
 
 COPY --from=builder /src/dist /app
 COPY --from=builder /src/cinny-docker.conf /etc/nginx/conf.d/default.conf
